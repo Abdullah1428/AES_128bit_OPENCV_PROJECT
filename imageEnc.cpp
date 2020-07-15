@@ -22,6 +22,16 @@ Mat slice_of_data(Mat data, int x, int y){
     return block;
 }
 
+void log_block(Mat block){
+    for (int i=0; i<block.rows; i++){
+        for (int j=0; j<block.cols; j++){
+            cout<<std::hex<<(int)block.at<uint8_t>(i,j)<<' ';
+        }
+        cout<<endl;
+    } 
+
+}
+
 void imageEnc ()
 {
     // 16 bytes of key or 128 bits of key
@@ -32,6 +42,21 @@ void imageEnc ()
         0x15, 0xd2, 0x15, 0x4f,
         0x16, 0xa6, 0x88, 0x3c
     };
+    
+    uint8_t test_block[8][8] = {
+        {0x32, 0x88, 0x31, 0xe0, 0x31, 0x31, 0x88, 0x07},
+        {0x43, 0x5a, 0x31, 0x37, 0x31, 0x31, 0x88, 0x07},
+        {0xf6, 0x30, 0x98, 0x07, 0x31, 0x31, 0x88, 0x07},
+        {0xa8, 0x8d, 0xa2, 0x34, 0x31, 0x31, 0x88, 0x07},
+        {0xf6, 0x30, 0x98, 0x07, 0x31, 0x31, 0x88, 0x07},
+        {0xf6, 0x30, 0x98, 0x07, 0x31, 0x31, 0x88, 0x07},
+        {0xf6, 0x30, 0x98, 0x07, 0x31, 0x31, 0x88, 0x07},
+        {0xf6, 0x30, 0x98, 0x07, 0x31, 0x31, 0x88, 0x07}
+    };
+
+    // creating a test data
+    Mat test_data(8, 8, CV_8UC1);
+    dataCopytoMatrix(test_data,test_block);
 
     // copying our key to Mat
     Mat keyBlock(NumberofBlocks, NumberofBlocks, CV_8UC1);
@@ -64,10 +89,9 @@ void imageEnc ()
         {
             // selecting 4x4 block now
             Mat tile(NumberofBlocks,NumberofBlocks,CV_8UC1);
-            tile = slice_of_data(InputImage,col,row);   //this should extract 4x4 block from inputimage
-            /*
-                print tile to console to make sure you are getting the right values
-            */ 
+            tile = slice_of_data(test_data,col,row);   //this should extract 4x4 block from inputimage
+            cout<<"tile :"<<endl;
+            log_block(tile);
            image_encryption(tile,keyBlock,row,col,EncodedImage);
         }        
     }
