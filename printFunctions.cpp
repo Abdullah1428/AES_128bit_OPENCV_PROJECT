@@ -99,3 +99,14 @@ void oneDcopytoMatrix (Mat dest,uint8_t source[])
         }
     }   
 }
+
+void dataCopytoMatrix8(Mat mat, uint8_t array[8][8])
+{
+    for (int i = 0; i < NumberofBlocks+NumberofBlocks; i++)
+    {
+        for (int j = 0; j < NumberofBlocks+NumberofBlocks; j++)
+        {
+            mat.at<uint8_t>(i, j) = array[i][j];
+        }
+    }
+}
