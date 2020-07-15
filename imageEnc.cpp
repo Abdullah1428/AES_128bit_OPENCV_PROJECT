@@ -28,7 +28,11 @@ void imageEnc ()
     // our input image is 316 x 316
 
     Mat InputImage = imread("InputFile.jpg",IMREAD_COLOR);
-    Mat EncodedImage(InputImage.rows,InputImage.cols,CV_8UC1);
+    
+    Mat splitChannels[3];
+    Mat encrypted_splitChannels[3]
+
+    split(InputImage, splitChannels);
 
     // calculating total pixels in the image
     int totalPixels = InputImage.rows * InputImage.cols;
@@ -45,24 +49,30 @@ void imageEnc ()
 
 
     // now reading 4x4 blocs from the image 
-    for (int row=0;row<InputImage.rows;row+=NumberofBlocks)
-    {
-        for (int col=0;col<InputImage.cols;col+=NumberofBlocks)
+    for (int k=0; k<3; k++){
+        for (int row=0;row<InputImage.rows;row+=NumberofBlocks)
         {
-            // selecting 4x4 block now
-            Mat tile(NumberofBlocks,NumberofBlocks,CV_8UC1);
-            tile = InputImage(cv::Range(row,min(row+NumberofBlocks,InputImage.rows)),cv::Range(col,min(col+NumberofBlocks,InputImage.cols)));
-            
-           image_encryption(tile,keyBlock,row,col,EncodedImage);
-        }        
+            for (int col=0;col<InputImage.cols;col+=NumberofBlocks)
+            {
+                // selecting 4x4 block now
+                Mat tile(NumberofBlocks,NumberofBlocks,CV_8UC1);
+                tile = splitChannels[k](cv::Range(row,min(row+NumberofBlocks,InputImage.rows)),cv::Range(col,min(col+NumberofBlocks,InputImage.cols)));
+                
+            image_encryption(tile,keyBlock,row,col,&encrypted_splitChannels[k]);
+            }        
+        }
     }
+    
+    Mat encrypted_image;
 
-    imshow("EncryptedImage",EncodedImage);
+    merge(encrypted_splitChannels, 3, encrypted_image);
+
+    imshow("EncryptedImage",encrypted_image);
     
     waitKey();
 }
 
-void image_encryption(Mat block,Mat key,int x,int y,Mat encrypt)
+void image_encryption(Mat block,Mat key,int x,int y,Mat * encrypt)
 {
 
     block = block_encryption(block,key);
@@ -71,7 +81,7 @@ void image_encryption(Mat block,Mat key,int x,int y,Mat encrypt)
     {
         for(int c=y;c<y+NumberofBlocks;c++)
         {
-            encrypt.at<uint8_t>(r,c) = block.at<uint8_t>(r,c);
+            encrypt->at<uint8_t>(r,c) = block.at<uint8_t>(r,c);
         }
     }
 }
