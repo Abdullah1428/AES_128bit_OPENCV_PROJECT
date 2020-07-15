@@ -9,7 +9,7 @@ int main(int argc, char ** argv)
 {
     //file_Decryption_ECB();
 
-    file_Decryption_CBC();
+    //file_Decryption_CBC();
 
     //imageDec();
     

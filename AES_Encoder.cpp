@@ -10,9 +10,9 @@ int main(int argc, char **argv)
 {
     //file_Encryption_ECB();
     
-    file_Encryption_CBC();
+    //file_Encryption_CBC();
 
-    //imageEnc();
+    imageEnc();
 
     return 0;
 }
