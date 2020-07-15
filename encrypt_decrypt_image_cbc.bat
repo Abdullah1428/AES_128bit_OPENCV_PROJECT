@@ -1,6 +1,6 @@
 g++ ^
                 -g ^
-                ./image_Encryption_Decryption.cpp ./printFunctions.cpp ./keyExpansion.cpp ./encryption_operations.cpp ./block_encryption.cpp ./decryption_operations.cpp ./block_decryption.cpp ./AES_Encoder.cpp ^
+                ./image_Encryption_Decryption_CBC.cpp ./printFunctions.cpp ./keyExpansion.cpp ./encryption_operations.cpp ./block_encryption.cpp ./decryption_operations.cpp ./block_decryption.cpp ./AES_Encoder.cpp ^
                 -o ^
                 output_encrypt.exe ^
                 -I D:\OpenCV-MinGW-Build-OpenCV-4.1.1-x64\include ^

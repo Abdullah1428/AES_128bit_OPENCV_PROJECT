@@ -141,7 +141,7 @@ void file_Decryption_CBC()
     
     // Now this is CBC Mode so we will need a initialization vector which
     // will be XORed with the data
-    // for CBC Mode declaing IV matrix
+    // for CBC Mode declaring IV matrix
     uint8_t iv[NumberofBlocks][NumberofBlocks] = 
     {
         0x0f, 0x0f, 0x0f, 0x0f,

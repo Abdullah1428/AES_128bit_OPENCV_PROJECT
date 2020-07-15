@@ -69,5 +69,7 @@ void file_Decryption_ECB();
 // CBC Mode
 void file_Decryption_CBC();
 
-// for image encryption and decryption
-void image_Encryption_Decryption();
+// for image encryption and decryption in ECB and CBC mode
+Mat XOR_CBC_Image(Mat,Mat); // iv and data block
+void image_Encryption_Decryption_ECB();
+void image_Encryption_Decryption_CBC();

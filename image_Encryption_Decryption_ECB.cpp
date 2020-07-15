@@ -3,7 +3,7 @@
     implementation by Abdullah1428
     CS Project
 */
-// this file contains the image encryption 
+// this file contains the image encryption decryption for ECB mode
 
 #include "AES.hpp"
 
@@ -12,7 +12,7 @@ Mat image_channel_decryption(Mat,Mat);
 Mat image_block_getter(Mat,int,int);
 void image_block_setter(Mat *,Mat,int,int);
 
-void image_Encryption_Decryption()
+void image_Encryption_Decryption_ECB()
 {
     // 16 bytes of key or 128 bits of key
     uint8_t key[NumberofBlocks][NumberofBlocks] = 
@@ -68,7 +68,7 @@ void image_Encryption_Decryption()
 
     merge(decryptedColorChannels,3,decryptedImage);
 
-    //imwrite("EncryptedImage",encryptedImage);
+    //imwrite("decryptedImage",decryptedImage);
 
     imshow("decryptedImage",decryptedImage);
 
@@ -124,9 +124,9 @@ Mat image_channel_decryption(Mat block,Mat key)
         {
             // picking 4x4 block here
             fourCrossfourBlock = image_block_getter(block,j,i);
-            // encrypting the block
+            // decrypting the block
             fourCrossfourBlock =  block_decryption(fourCrossfourBlock,key);
-            // copy the resultant block to encrypted block
+            // copy the resultant block to decrypted block
             image_block_setter(&decryptedBlock,fourCrossfourBlock,j,i);
         }
     } 

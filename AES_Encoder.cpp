@@ -12,7 +12,9 @@ int main(int argc, char **argv)
     
     //file_Encryption_CBC();
 
-    image_Encryption_Decryption();
+    //image_Encryption_Decryption_ECB();
+
+    image_Encryption_Decryption_CBC();
 
     return 0;
 }
