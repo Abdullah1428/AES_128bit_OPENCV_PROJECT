@@ -11,7 +11,7 @@
 #include "lookup_tables.hpp"
 
 // method to shift row
-void shiftRow(Mat, int, int);
+void inverseshiftRow(Mat, int, int);
 
 // inverse Sub Byte method
 Mat inverseSubByte(Mat state)
@@ -34,15 +34,16 @@ Mat inverseSubByte(Mat state)
 Mat inverseShiftRows(Mat state)
 {
 
-    shiftRow(state, 1, NumberofBlocks-1);
-    shiftRow(state, 2, NumberofBlocks-2);
-    shiftRow(state, 3, NumberofBlocks-3);
+    inverseshiftRow(state, 1, NumberofBlocks-1);
+    inverseshiftRow(state, 2, NumberofBlocks-2);
+    inverseshiftRow(state, 3, NumberofBlocks-3);
 
     return state;
 }
 
-// method to shift each row of the mat 
-void shiftRow(Mat state, int row, int shifts)
+// method to shift each row of the mat
+ 
+void inverseshiftRow(Mat state, int row, int shifts)
 {
 
     uint8_t x;
@@ -56,6 +57,7 @@ void shiftRow(Mat state, int row, int shifts)
         state.at<uint8_t>(row, NumberofBlocks - 1) = x;
     }
 }
+
 
 // inverse Mix Columns method 
 Mat inverseMixColumns(Mat state)
@@ -109,6 +111,7 @@ Mat inverseMixColumns(Mat state)
 }
 
 // add round key method same as encryption
+/*
 Mat addRoundKey(Mat state, uint8_t * key)
 {
     /*
@@ -117,7 +120,7 @@ Mat addRoundKey(Mat state, uint8_t * key)
     {
        cout<<std::hex<<(int)key[i]<<" ";
     }
-    */
+    
     // simply XOR each key element with the state mat
     Mat temp(NumberofBlocks, NumberofBlocks, CV_8UC1);
     temp = state;
@@ -131,3 +134,4 @@ Mat addRoundKey(Mat state, uint8_t * key)
 
     return temp;
 }
+*/

@@ -69,7 +69,5 @@ void file_Decryption_ECB();
 // CBC Mode
 void file_Decryption_CBC();
 
-// for image encryption
-void imageEnc();
-// for image decryption
-void imageDec();
+// for image encryption and decryption
+void image_Encryption_Decryption();
