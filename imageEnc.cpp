@@ -9,6 +9,19 @@
 
 void image_encryption(Mat block,Mat key,int x,int y,Mat encrypt);
 
+Mat slice_of_data(Mat data, int x, int y){
+    Mat block(4,4,CV_8UC1);
+    block = Mat::zeros(4,4,CV_8UC1);
+    for (int i=y; i<(y+ROWS); i++){
+        for (int j=x; j<(x+COLS); j++){
+            if (i<data.rows && j<data.cols){
+                block.at<uint8_t>(i-y,j-x) = data.at<uint8_t>(i,j);
+            }
+        }
+    }
+    return block;
+}
+
 void imageEnc ()
 {
     // 16 bytes of key or 128 bits of key
@@ -51,8 +64,10 @@ void imageEnc ()
         {
             // selecting 4x4 block now
             Mat tile(NumberofBlocks,NumberofBlocks,CV_8UC1);
-            tile = InputImage(cv::Range(row,min(row+NumberofBlocks,InputImage.rows)),cv::Range(col,min(col+NumberofBlocks,InputImage.cols)));
-            
+            tile = slice_of_data(InputImage,col,row);   //this should extract 4x4 block from inputimage
+            /*
+                print tile to console to make sure you are getting the right values
+            */ 
            image_encryption(tile,keyBlock,row,col,EncodedImage);
         }        
     }
