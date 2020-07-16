@@ -11,7 +11,7 @@ void file_Decryption_ECB()
     stringstream cipherString;
     string cipherData;
 	ifstream cipherfile;
-	cipherfile.open("EncodedFile.txt", ios::in | ios::binary);
+	cipherfile.open("files/EncodedFile.txt", ios::in | ios::binary);
     if (cipherfile.is_open()) 
     {
         cipherString << cipherfile.rdbuf();
@@ -77,7 +77,7 @@ void file_Decryption_ECB()
     //PrintArrayWithRange(decryptedData,"The orignal data is : ",cipherLength);
 
     ofstream outfile;
-	outfile.open("DecodedFile.txt", ios::out | ios::binary);
+	outfile.open("files/DecodedFile.txt", ios::out | ios::binary);
 	if (outfile.is_open())
 	{
 		outfile.write((char *)decryptedData,cipherLength);
@@ -95,7 +95,7 @@ void file_Decryption_CBC()
     stringstream cipherString;
     string cipherData;
 	ifstream cipherfile;
-	cipherfile.open("EncodedFile_CBC.txt", ios::in | ios::binary);
+	cipherfile.open("files/EncodedFile_CBC.txt", ios::in | ios::binary);
     if (cipherfile.is_open()) 
     {
         cipherString << cipherfile.rdbuf();
@@ -182,7 +182,7 @@ void file_Decryption_CBC()
     //PrintArrayWithRange(decryptedData,"The orignal data is : ",cipherLength);
 
     ofstream outfile;
-	outfile.open("DecodedFile_CBC.txt", ios::out | ios::binary);
+	outfile.open("files/DecodedFile_CBC.txt", ios::out | ios::binary);
 	if (outfile.is_open())
 	{
 		outfile.write((char *)decryptedData,cipherLength);

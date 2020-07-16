@@ -38,7 +38,7 @@ void image_Encryption_Decryption_CBC()
 
     // reading input image which must be named InputFile.jpg
     // our input image is 316 x 316
-    Mat InputImage = imread("InputFile.jpg",IMREAD_COLOR);
+    Mat InputImage = imread("files/linux.jpg",IMREAD_COLOR);
 
     // now as we know color image has 3 colors in it R G B
     // so we will be needing to split each color from the image and then
@@ -70,7 +70,7 @@ void image_Encryption_Decryption_CBC()
 
     merge(encryptedColorChannels,3,encryptedImage);
 
-    //imwrite("EncryptedImage.jpg",encryptedImage);
+    imwrite("files/EncryptedImage_CBC.jpg",encryptedImage);
 
     imshow("EncryptedImage",encryptedImage);
 
@@ -106,7 +106,7 @@ void image_Encryption_Decryption_CBC()
 
     merge(decryptedColorChannels,3,decryptedImage);
 
-    //imwrite("decryptedImage.jpg",decryptedImage);
+    imwrite("files/decryptedImage_CBC.jpg",decryptedImage);
 
     //Mat decrypt = imread("decryptedImage.jpg",IMREAD_COLOR);
 
@@ -115,7 +115,6 @@ void image_Encryption_Decryption_CBC()
     waitKey();
 
 }
-
 
 Mat image_channel_encryption(Mat block,Mat key,Mat iv)
 {

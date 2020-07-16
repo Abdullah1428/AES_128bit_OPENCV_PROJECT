@@ -11,7 +11,7 @@ void file_Encryption_ECB()
     stringstream fileString;
     string fileData;
 	ifstream userData;
-	userData.open("InputFile.txt", ios::in | ios::binary);
+	userData.open("files/InputFile.txt", ios::in | ios::binary);
     if (userData.is_open()) 
     {
         fileString << userData.rdbuf();
@@ -115,7 +115,7 @@ void file_Encryption_ECB()
 
     // Write the encrypted string out to file ""
 	ofstream outfile;
-	outfile.open("EncodedFile.txt", ios::out | ios::binary);
+	outfile.open("files/EncodedFile.txt", ios::out | ios::binary);
 	if (outfile.is_open())
 	{
 		outfile.write((char *)encryptedData,adjustedLength);
@@ -133,7 +133,7 @@ void file_Encryption_CBC()
     stringstream fileString;
     string fileData;
 	ifstream userData;
-	userData.open("InputFile.txt", ios::in | ios::binary);
+	userData.open("files/InputFile.txt", ios::in | ios::binary);
     if (userData.is_open()) 
     {
         fileString << userData.rdbuf();
@@ -255,7 +255,7 @@ void file_Encryption_CBC()
 
     // Write the encrypted string out to file ""
 	ofstream outfile;
-	outfile.open("EncodedFile_CBC.txt", ios::out | ios::binary);
+	outfile.open("files/EncodedFile_CBC.txt", ios::out | ios::binary);
 	if (outfile.is_open())
 	{
 		outfile.write((char *)encryptedData,adjustedLength);

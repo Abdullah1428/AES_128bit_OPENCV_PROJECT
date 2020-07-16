@@ -28,7 +28,7 @@ void image_Encryption_Decryption_ECB()
 
     // reading input image which must be named InputFile.jpg
     // our input image is 316 x 316
-    Mat InputImage = imread("InputFile.jpg",IMREAD_COLOR);
+    Mat InputImage = imread("files/InputFile.jpg",IMREAD_COLOR);
 
     // now as we know color image has 3 colors in it R G B
     // so we will be needing to split each color from the image and then
@@ -53,7 +53,7 @@ void image_Encryption_Decryption_ECB()
 
     merge(encryptedColorChannels,3,encryptedImage);
 
-    //imwrite("EncryptedImage.jpg",encryptedImage);
+    imwrite("files/EncryptedImage_ECB.jpg",encryptedImage);
 
     imshow("EncryptedImage",encryptedImage);
 
@@ -67,7 +67,7 @@ void image_Encryption_Decryption_ECB()
 
     merge(decryptedColorChannels,3,decryptedImage);
 
-    //imwrite("decryptedImage",decryptedImage);
+    imwrite("files/decryptedImage_ECB.jpg",decryptedImage);
 
     imshow("decryptedImage",decryptedImage);
 
@@ -131,91 +131,5 @@ Mat image_channel_decryption(Mat block,Mat key)
     } 
     return decryptedBlock;
 }
-
-
-
-
-
-
-/*
-    // dubugging for picking 4x4 blocks of images and large sets of data
-
-    uint8_t test_block[8][8] = {
-        {0x32, 0x88, 0x31, 0xe0, 0x31, 0x31, 0x88, 0x07},
-        {0x43, 0x5a, 0x31, 0x37, 0x31, 0x31, 0x88, 0x07},
-        {0xf6, 0x30, 0x98, 0x07, 0x31, 0x31, 0x88, 0x07},
-        {0xa8, 0x8d, 0xa2, 0x34, 0x31, 0x31, 0x88, 0x07},
-        {0xf6, 0x30, 0x98, 0x07, 0x31, 0x31, 0x88, 0x07},
-        {0xf6, 0x30, 0x98, 0x07, 0x31, 0x31, 0x88, 0x07},
-        {0xf6, 0x30, 0x98, 0x07, 0x31, 0x31, 0x88, 0x07},
-        {0xf6, 0x30, 0x98, 0x07, 0x31, 0x31, 0x88, 0x07}
-    };
-
-    // creating a test data
-    Mat test_data(8, 8, CV_8UC1);
-    dataCopytoMatrix8(test_data,test_block);
-
-
-// now reading 4x4 blocs from the image 
-    for (int row=0;row<8;row+=NumberofBlocks)
-    {
-        for (int col=0;col<8;col+=NumberofBlocks)
-        {
-            // selecting 4x4 block now
-            Mat tile(NumberofBlocks,NumberofBlocks,CV_8UC1);
-            //tile = slice_of_data(InputImage,col,row);   //this should extract 4x4 block from inputimage
-            tile = test_data(cv::Range(row,min(row+NumberofBlocks,8)),cv::Range(col,min(col+NumberofBlocks,8)));
-            
-            //    print tile to console to make sure you are getting the right values
-            
-            //PrintMatrix(tile,"Tile value");
-            //image_encryption(tile,keyBlock,row,col,EncodedImage);
-            //tile = slice_of_data(test_data,col,row);   //this should extract 4x4 block from inputimage
-            //cout<<"tile :"<<endl;
-            //log_block(tile);
-           //image_encryption(tile,keyBlock,row,col,EncodedImage);
-
-        }        
-    }
-
-Mat slice_of_data(Mat data, int x, int y){
-    Mat block(4,4,CV_8UC1);
-    block = Mat::zeros(4,4,CV_8UC1);
-    for (int i=y; i<(y+NumberofBlocks); i++){
-        for (int j=x; j<(x+NumberofBlocks); j++){
-            if (i<data.rows && j<data.cols){
-                block.at<uint8_t>(i-y,j-x) = data.at<uint8_t>(i,j);
-            }
-        }
-    }
-    return block;
-}
-
-void log_block(Mat block){
-    for (int i=0; i<block.rows; i++){
-        for (int j=0; j<block.cols; j++){
-            cout<<std::hex<<(int)block.at<uint8_t>(i,j)<<' ';
-        }
-        cout<<endl;
-    } 
-
-}
-
-void image_encryption(Mat block,Mat key,int x,int y,Mat * encrypt)
-{
-
-    block = block_encryption(block,key);
-
-    for(int r=x;r<x+NumberofBlocks;r++)
-    {
-        for(int c=y;c<y+NumberofBlocks;c++)
-        {
-            encrypt->at<uint8_t>(r,c) = block.at<uint8_t>(r,c);
-        }
-    }
-}
-
-*/
-
 
 
