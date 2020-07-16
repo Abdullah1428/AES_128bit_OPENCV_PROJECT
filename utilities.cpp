@@ -200,3 +200,51 @@ Mat XOR_CBC_Image(Mat iv, Mat data)
 
     return temp;
 }
+
+// 3 horizontal blocks
+void horizontalBlocks(Mat matrix, int size, const char * sentence)
+{
+    cout << endl << sentence << endl;
+
+    int coll = 0;
+    int horizontal_Condition = 4;
+
+    for(int k = 0; k < size; k++) 
+    {
+        for (int row = 0; row < NumberofBlocks; row++)
+        {
+            for (int col = coll; col < horizontal_Condition; col++)
+            {
+                cout << std::hex << (int)matrix.at<uint8_t>(row, col) << " ";
+            }
+            cout << endl;
+        }
+        cout<<endl;
+        horizontal_Condition += 4;
+        coll+=4;
+    }
+}
+
+// 3 vertical blocks
+void verticalBlocks(Mat matrix, int size, const char * sentence)
+{
+    cout << endl << sentence << endl;
+
+    int roww = 0;
+    int vertical_Condition = 4;
+
+    for(int k = 0; k < size; k++) 
+    {
+        for (int row = roww; row < vertical_Condition; row++)
+        {
+            for (int col = 0; col < NumberofBlocks; col++)
+            {
+                cout << std::hex << (int)matrix.at<uint8_t>(row, col) << " ";
+            }
+            cout << endl;
+        }
+        cout<<endl;
+        vertical_Condition += 4;
+        roww+=4;
+    }
+}

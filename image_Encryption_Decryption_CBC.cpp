@@ -58,9 +58,13 @@ void image_Encryption_Decryption_CBC()
         encryptedColorChannels[channel] = image_channel_encryption(imageColorChannels[channel],keyBlock,ivBlock); 
     }
 
-    PrintMatrix(imageColorChannels[0],"The imageColorChannel 0");
-    PrintMatrix(imageColorChannels[1],"The imageColorChannel 1");
-    PrintMatrix(imageColorChannels[2],"The imageColorChannel 2");
+    /*
+    horizontalBlocks(encryptedColorChannels[0],3,"3 horizontal blocks for encrypted image channel 0");
+    verticalBlocks(encryptedColorChannels[0],3,"3 vertical blocks for encrypted image channel 0");
+    */
+    //PrintMatrix(imageColorChannels[0],"The imageColorChannel 0");
+    //PrintMatrix(imageColorChannels[1],"The imageColorChannel 1");
+    //PrintMatrix(imageColorChannels[2],"The imageColorChannel 2");
     // Mat which will contain the final encrypted image after merging
     Mat encryptedImage;
 
@@ -68,24 +72,45 @@ void image_Encryption_Decryption_CBC()
 
     //imwrite("EncryptedImage.jpg",encryptedImage);
 
-    //imshow("EncryptedImage",encryptedImage);
+    imshow("EncryptedImage",encryptedImage);
 
     for(int channel = 0 ; channel < 3 ; channel++)
     {
         decryptedColorChannels[channel] = image_channel_decryption(encryptedColorChannels[channel],keyBlock,ivBlock); 
     }
 
-    PrintMatrix(decryptedColorChannels[0],"The decryptedColorChannel 0");
-    PrintMatrix(decryptedColorChannels[1],"The decryptedColorChannel 1");
-    PrintMatrix(decryptedColorChannels[2],"The decryptedColorChannel 2");
+    /*
+        // debugging the values to see the correct output values
+
+    horizontalBlocks(imageColorChannels[0],3,"3 horizontal blocks for orignal image channel 0");
+    horizontalBlocks(decryptedColorChannels[0],3,"3 horizontal blocks for decrypted image channel 0");
+    verticalBlocks(imageColorChannels[0],3,"3 vertical blocks for orignal image channel 0");
+    verticalBlocks(decryptedColorChannels[0],3,"3 vertical blocks for decrypted image channel 0");
+
+    horizontalBlocks(imageColorChannels[1],3,"3 horizontal blocks for orignal image channel 1");
+    horizontalBlocks(decryptedColorChannels[1],3,"3 horizontal blocks for decrypted image channel 1");
+    verticalBlocks(imageColorChannels[1],3,"3 vertical blocks for orignal image channel 1");
+    verticalBlocks(decryptedColorChannels[1],3,"3 vertical blocks for decrypted image channel 1");
+
+    horizontalBlocks(imageColorChannels[1],3,"3 horizontal blocks for orignal image channel 2");
+    horizontalBlocks(decryptedColorChannels[1],3,"3 horizontal blocks for decrypted image channel 2");
+    verticalBlocks(imageColorChannels[1],3,"3 vertical blocks for orignal image channel 2");
+    verticalBlocks(decryptedColorChannels[1],3,"3 vertical blocks for decrypted image channel 2");
+
+    */
+    //PrintMatrix(decryptedColorChannels[0],"The decryptedColorChannel 0");
+    //PrintMatrix(decryptedColorChannels[1],"The decryptedColorChannel 1");
+    //PrintMatrix(decryptedColorChannels[2],"The decryptedColorChannel 2");
     // Mat which will contain the final encrypted image after merging
     Mat decryptedImage;
 
     merge(decryptedColorChannels,3,decryptedImage);
 
-    //imwrite("decryptedImage",decryptedImage);
+    //imwrite("decryptedImage.jpg",decryptedImage);
 
-    imshow("decryptedImage",decryptedImage);
+    //Mat decrypt = imread("decryptedImage.jpg",IMREAD_COLOR);
+
+    imshow("decrypted image",decryptedImage);
 
     waitKey();
 
@@ -99,7 +124,7 @@ Mat image_channel_encryption(Mat block,Mat key,Mat iv)
 
     //cout<<"The rows and cols for enc "<<rows<<cols<<endl;
 
-    Mat fourCrossfourBlock(NumberofBlocks,NumberofBlocks,CV_8UC1);
+    Mat fourCrossfourBlock;
     // here each channel of image will be encrypted 
     
     // we are recieving whole channel for image and key as arguments
@@ -109,41 +134,37 @@ Mat image_channel_encryption(Mat block,Mat key,Mat iv)
     cols - (cols % NumberofBlocks) + (cols % NumberofBlocks ? NumberofBlocks : 0),CV_8UC1 );
 
     //Mat encryptedBlock = Mat::zeros(rows,cols,CV_8UC1);
-
-    for(int i=0;i<rows;i+=NumberofBlocks)
+    for(int i = 0; i < rows; i+=NumberofBlocks)
     {
-        for(int j=0;j<cols;j+=NumberofBlocks)
+        for(int j = 0; j < cols; j+=NumberofBlocks)
         {
             // picking 4x4 block here
             fourCrossfourBlock = image_block_getter(block,j,i);
 
-            /*            
-            //first block of image matches with the first decrypted block
-            if(i == 0 && j == 0)
+            /*         
+            //orignal data block picking
+            if(i == 4 && j == 4)
             {
-                PrintMatrix(fourCrossfourBlock,"The first picked block of image");
+                PrintMatrix(fourCrossfourBlock,"The orignal data");
             }
-            */
-            
-
+            */            
             // xor data with iv block
             fourCrossfourBlock = XOR_CBC_Image(iv,fourCrossfourBlock);
             // encrypting the block
             fourCrossfourBlock =  block_encryption(fourCrossfourBlock,key);
 
             /*
-            encrypted block checking with picked block in decrypting 
-            if(i == 0 && j == 0)
+            //encrypted block checking with picked block in decrypting 
+            if(i == 64 && j == 64)
             {
                 PrintMatrix(fourCrossfourBlock,"The encrypted block");
             }
             */
 
-
             // update iv block for next iteration
             iv = fourCrossfourBlock;
             // copy the resultant block to encrypted block
-            image_block_setter(&encryptedBlock,fourCrossfourBlock,j,i);
+            image_block_setter(&encryptedBlock,fourCrossfourBlock,j,i);  
         } 
     } 
     return encryptedBlock;
@@ -161,24 +182,29 @@ Mat image_channel_decryption(Mat block,Mat key,Mat iv)
     //cout<<"The rows and cols for dec "<<rows<<cols<<endl;
     
     Mat fourCrossfourBlock;
+    Mat temp;
     Mat decryptedBlockiv;
     // here each channel of image will be encrypted 
     
     // we are recieving whole channel for image and key as arguments
     // first step is to pick 4x4 block from our image so that we can pass it to AES encryption block
 
+    //Mat decryptedBlock = Mat::zeros(rows - (rows % NumberofBlocks) + (rows % NumberofBlocks ? NumberofBlocks : 0),
+    //cols - (cols % NumberofBlocks) + (cols % NumberofBlocks ? NumberofBlocks : 0),CV_8UC1 );
+
     Mat decryptedBlock = Mat::zeros(rows,cols,CV_8UC1);
-    
-    for(int i=0;i<rows;i+=NumberofBlocks)
+
+    for(int i = 0; i < rows; i+=NumberofBlocks)
     {
-        for(int j=0;j<cols;j+=NumberofBlocks)
+        for(int j = 0; j < cols; j+=NumberofBlocks)
         {
+            temp = image_block_getter(block,j,i);
             // picking 4x4 block here
             fourCrossfourBlock = image_block_getter(block,j,i);
 
             /*
             // picking right data
-            if(i == 0 && j == 0)
+            if(i == 64 && j == 64)
             {
                 PrintMatrix(fourCrossfourBlock,"The picked block");
             }
@@ -186,14 +212,35 @@ Mat image_channel_decryption(Mat block,Mat key,Mat iv)
             // decrypting the block using cbc mode
             decryptedBlockiv =  block_decryption(fourCrossfourBlock,key);
             // xor decrypted block with iv
+
+            /*
+            if(i == 4 && j == 4)
+            {
+                PrintMatrix(iv,"This is iv Matrix");
+                PrintMatrix(decryptedBlockiv,"This is decrypted block");
+            }
+            */
+
             decryptedBlockiv = XOR_CBC_Image(iv,decryptedBlockiv);
+
+            /*
+                // here orignal data back should display
+
+            if(i == 4 && j == 4)
+            {
+                PrintMatrix(decryptedBlockiv,"is this orignal data back?");
+            }
+
+            */
+            
+
             // updating iv
-            iv = fourCrossfourBlock;
+            iv = temp;
             // copy decrypted block to fourcrossfour for storing
             fourCrossfourBlock = decryptedBlockiv;
             
             /*
-            decrypted block matches with first picked block for encryption
+            //decrypted block matches with first picked block for encryption
             if(i == 0 && j == 0)
             {
                 PrintMatrix(fourCrossfourBlock,"The first decrypted block of image");

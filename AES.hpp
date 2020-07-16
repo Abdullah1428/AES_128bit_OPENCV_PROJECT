@@ -24,6 +24,8 @@ void PrintMatrix(Mat, const char *);
 void PrintArray(uint8_t *, const char *);
 void PrintArrayWithRange(uint8_t *, const char *,int);
 void PrintExpandedKey(uint8_t *, const char *);
+void horizontalBlocks(Mat,int,const char *);
+void verticalBlocks(Mat,int,const char *);
 // data copy methods
 void dataCopytoMatrix(Mat, uint8_t array[4][4]);
 void matrixCopytoArray(Mat,uint8_t []);
