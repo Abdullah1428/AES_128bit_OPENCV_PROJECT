@@ -90,7 +90,7 @@ Mat image_channel_encryption(Mat block,Mat key,Mat iv)
 {
     int rows = block.rows;
     int cols = block.cols;
-    Mat fourCrossfourBlock;
+    Mat fourCrossfourBlock(NumberofBlocks,NumberofBlocks,CV_8UC1);
     // here each channel of image will be encrypted 
     
     // we are recieving whole channel for image and key as arguments
@@ -122,8 +122,8 @@ Mat image_channel_decryption(Mat block,Mat key,Mat iv)
 {
     int rows = block.rows;
     int cols = block.cols;
-    Mat fourCrossfourBlock;
-    Mat decryptedBlockiv;
+    Mat fourCrossfourBlock(NumberofBlocks,NumberofBlocks,CV_8UC1);
+    Mat decryptedBlockiv(NumberofBlocks,NumberofBlocks,CV_8UC1);
     // here each channel of image will be encrypted 
     
     // we are recieving whole channel for image and key as arguments

@@ -290,24 +290,6 @@ Mat file_encryption(uint8_t data[],Mat key,uint8_t cipher[])
     return encrypted_data;
 }
 
-Mat XOR_CBC(Mat iv, uint8_t data[])
-{
-    Mat plainText(NumberofBlocks, NumberofBlocks, CV_8UC1);
-
-    oneDcopytoMatrix(plainText,data);    
-
-    Mat temp(NumberofBlocks, NumberofBlocks, CV_8UC1);
-
-    for (int row = 0; row < NumberofBlocks; row++)
-    {
-        for (int col = 0; col < NumberofBlocks; col++)
-        {
-            temp.at<uint8_t>(row, col) = plainText.at<uint8_t>(row, col) ^ iv.at<uint8_t>(row, col);
-        }
-    }
-
-    return temp;
-}
 
 // for AES one block of data will be 16 bytes or 4x4 2d array
     
