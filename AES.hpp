@@ -73,3 +73,6 @@ void file_Decryption_CBC();
 Mat XOR_CBC_Image(Mat,Mat); // iv and data block
 void image_Encryption_Decryption_ECB();
 void image_Encryption_Decryption_CBC();
+// picking and placing 4x4 blocks
+Mat image_block_getter(Mat,int,int);
+void image_block_setter(Mat *,Mat,int,int);

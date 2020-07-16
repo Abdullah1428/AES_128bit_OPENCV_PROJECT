@@ -110,3 +110,93 @@ void dataCopytoMatrix8(Mat mat, uint8_t array[8][8])
         }
     }
 }
+
+/////////////////////////////////////////////////////////////////////////////
+// Similar Methods used for all types of encryptions and decryptions
+Mat image_block_getter(Mat data, int x, int y)
+{
+    Mat block(4,4,CV_8UC1);
+    block = Mat::zeros(4,4,CV_8UC1);
+    for (int i=y; i<(y+NumberofBlocks); i++)
+    {
+        for (int j=x; j<(x+NumberofBlocks); j++)
+        {
+            if (i<data.rows && j<data.cols)
+            {
+                block.at<uint8_t>(i-y,j-x) = data.at<uint8_t>(i,j);
+            }
+        }
+    }
+    return block;
+}
+
+void image_block_setter(Mat * setter ,Mat block,int x,int y)
+{
+    for (int i=y; i<(y+NumberofBlocks); i++)
+    {
+        for (int j=x; j<(x+NumberofBlocks); j++)
+        {
+            setter->at<uint8_t>(i,j) = block.at<uint8_t>(i-y,j-x);
+        }
+    }
+}
+
+// add round key method
+Mat addRoundKey(Mat state, uint8_t * key)
+{
+    /*
+    cout<<endl<<endl<<"Key Round Picking 16 bytes"<<endl;
+    for(int i=0;i<16;i++)
+    {
+       cout<<std::hex<<(int)key[i]<<" ";
+    }
+    */
+    // simply XOR each key element with the state mat
+    Mat temp(NumberofBlocks, NumberofBlocks, CV_8UC1);
+    temp = state;
+    for (int row = 0; row < NumberofBlocks; row++)
+    {
+        for (int col = 0; col < NumberofBlocks; col++)
+        {
+            temp.at<uint8_t>(row, col) = state.at<uint8_t>(row, col) ^ key[row + 4 * col];
+        }
+    }
+
+    return temp;
+}
+
+// Mat XOR CBC 
+Mat XOR_CBC(Mat iv, uint8_t data[])
+{
+    Mat plainText(NumberofBlocks, NumberofBlocks, CV_8UC1);
+
+    oneDcopytoMatrix(plainText,data);    
+
+    Mat temp(NumberofBlocks, NumberofBlocks, CV_8UC1);
+
+    for (int row = 0; row < NumberofBlocks; row++)
+    {
+        for (int col = 0; col < NumberofBlocks; col++)
+        {
+            temp.at<uint8_t>(row, col) = plainText.at<uint8_t>(row, col) ^ iv.at<uint8_t>(row, col);
+        }
+    }
+
+    return temp;
+}
+
+// Mat XOR CBC image
+Mat XOR_CBC_Image(Mat iv, Mat data)
+{
+    Mat temp(NumberofBlocks, NumberofBlocks, CV_8UC1);
+
+    for (int row = 0; row < NumberofBlocks; row++)
+    {
+        for (int col = 0; col < NumberofBlocks; col++)
+        {
+            temp.at<uint8_t>(row, col) = data.at<uint8_t>(row, col) ^ iv.at<uint8_t>(row, col);
+        }
+    }
+
+    return temp;
+}

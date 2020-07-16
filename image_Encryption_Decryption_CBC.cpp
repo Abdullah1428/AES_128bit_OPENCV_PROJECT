@@ -9,9 +9,6 @@
 
 Mat image_channel_encryption(Mat,Mat,Mat);
 Mat image_channel_decryption(Mat,Mat,Mat);
-Mat image_block_getter(Mat,int,int);
-void image_block_setter(Mat *,Mat,int,int);
-Mat XOR_CBC_Image(Mat,Mat);
 
 void image_Encryption_Decryption_CBC()
 {
@@ -41,7 +38,7 @@ void image_Encryption_Decryption_CBC()
 
     // reading input image which must be named InputFile.jpg
     // our input image is 316 x 316
-    Mat InputImage = imread("InputFile.jpg",IMREAD_COLOR);
+    Mat InputImage = imread("p.jpg",IMREAD_COLOR);
 
     // now as we know color image has 3 colors in it R G B
     // so we will be needing to split each color from the image and then
@@ -141,63 +138,19 @@ Mat image_channel_decryption(Mat block,Mat key,Mat iv)
         {
             // picking 4x4 block here
             fourCrossfourBlock = image_block_getter(block,j,i);
-            // decrypting the block
+            // decrypting the block using cbc mode
             decryptedBlockiv =  block_decryption(fourCrossfourBlock,key);
             // xor decrypted block with iv
-            decryptedBlockiv = XOR_CBC_Image(iv,decryptedBlockiv);
+            iv = XOR_CBC_Image(iv,decryptedBlockiv);
+            // copy the resultant block to decrypted block
+            image_block_setter(&decryptedBlock,iv,j,i);
             // updating iv
             iv = fourCrossfourBlock;
-            // updating data block
-            fourCrossfourBlock = decryptedBlockiv;
-            // copy the resultant block to decrypted block
-            image_block_setter(&decryptedBlock,fourCrossfourBlock,j,i);
         }
     } 
     return decryptedBlock;
 }
 
-Mat image_block_getter(Mat data, int x, int y)
-{
-    Mat block(4,4,CV_8UC1);
-    block = Mat::zeros(4,4,CV_8UC1);
-    for (int i=y; i<(y+NumberofBlocks); i++)
-    {
-        for (int j=x; j<(x+NumberofBlocks); j++)
-        {
-            if (i<data.rows && j<data.cols)
-            {
-                block.at<uint8_t>(i-y,j-x) = data.at<uint8_t>(i,j);
-            }
-        }
-    }
-    return block;
-}
-
-void image_block_setter(Mat * setter ,Mat block,int x,int y)
-{
-    for (int i=y; i<(y+NumberofBlocks); i++)
-    {
-        for (int j=x; j<(x+NumberofBlocks); j++)
-        {
-            setter->at<uint8_t>(i,j) = block.at<uint8_t>(i-y,j-x);
-        }
-    }
-}
-
-Mat XOR_CBC_Image(Mat iv, Mat data)
-{
-    Mat temp(NumberofBlocks, NumberofBlocks, CV_8UC1);
-
-    for (int row = 0; row < NumberofBlocks; row++)
-    {
-        for (int col = 0; col < NumberofBlocks; col++)
-        {
-            temp.at<uint8_t>(row, col) = data.at<uint8_t>(row, col) ^ iv.at<uint8_t>(row, col);
-        }
-    }
-
-    return temp;
-}
 
 
 

@@ -1,6 +1,6 @@
 g++ ^
                 -g ^
-                ./fileDec_ECB_CBC.cpp ./printFunctions.cpp ./keyExpansion.cpp ./decryption_operations.cpp ./block_decryption.cpp ./AES_Decoder.cpp ^
+                ./fileDec_ECB_CBC.cpp ./utilities.cpp ./keyExpansion.cpp ./decryption_operations.cpp ./block_decryption.cpp ./AES_Decoder.cpp ^
                 -o ^
                 output_decrypt.exe ^
                 -I D:\OpenCV-MinGW-Build-OpenCV-4.1.1-x64\include ^

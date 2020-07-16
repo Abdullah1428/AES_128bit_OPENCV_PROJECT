@@ -9,8 +9,7 @@
 
 Mat image_channel_encryption(Mat,Mat);
 Mat image_channel_decryption(Mat,Mat);
-Mat image_block_getter(Mat,int,int);
-void image_block_setter(Mat *,Mat,int,int);
+
 
 void image_Encryption_Decryption_ECB()
 {
@@ -133,33 +132,7 @@ Mat image_channel_decryption(Mat block,Mat key)
     return decryptedBlock;
 }
 
-Mat image_block_getter(Mat data, int x, int y)
-{
-    Mat block(4,4,CV_8UC1);
-    block = Mat::zeros(4,4,CV_8UC1);
-    for (int i=y; i<(y+NumberofBlocks); i++)
-    {
-        for (int j=x; j<(x+NumberofBlocks); j++)
-        {
-            if (i<data.rows && j<data.cols)
-            {
-                block.at<uint8_t>(i-y,j-x) = data.at<uint8_t>(i,j);
-            }
-        }
-    }
-    return block;
-}
 
-void image_block_setter(Mat * setter ,Mat block,int x,int y)
-{
-    for (int i=y; i<(y+NumberofBlocks); i++)
-    {
-        for (int j=x; j<(x+NumberofBlocks); j++)
-        {
-            setter->at<uint8_t>(i,j) = block.at<uint8_t>(i-y,j-x);
-        }
-    }
-}
 
 
 
