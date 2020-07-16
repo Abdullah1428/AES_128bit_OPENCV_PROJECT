@@ -58,6 +58,9 @@ void image_Encryption_Decryption_CBC()
         encryptedColorChannels[channel] = image_channel_encryption(imageColorChannels[channel],keyBlock,ivBlock); 
     }
 
+    PrintMatrix(imageColorChannels[0],"The imageColorChannel 0");
+    PrintMatrix(imageColorChannels[1],"The imageColorChannel 1");
+    PrintMatrix(imageColorChannels[2],"The imageColorChannel 2");
     // Mat which will contain the final encrypted image after merging
     Mat encryptedImage;
 
@@ -65,13 +68,16 @@ void image_Encryption_Decryption_CBC()
 
     //imwrite("EncryptedImage.jpg",encryptedImage);
 
-    imshow("EncryptedImage",encryptedImage);
+    //imshow("EncryptedImage",encryptedImage);
 
     for(int channel = 0 ; channel < 3 ; channel++)
     {
         decryptedColorChannels[channel] = image_channel_decryption(encryptedColorChannels[channel],keyBlock,ivBlock); 
     }
 
+    PrintMatrix(decryptedColorChannels[0],"The decryptedColorChannel 0");
+    PrintMatrix(decryptedColorChannels[1],"The decryptedColorChannel 1");
+    PrintMatrix(decryptedColorChannels[2],"The decryptedColorChannel 2");
     // Mat which will contain the final encrypted image after merging
     Mat decryptedImage;
 
@@ -111,12 +117,13 @@ Mat image_channel_encryption(Mat block,Mat key,Mat iv)
             // picking 4x4 block here
             fourCrossfourBlock = image_block_getter(block,j,i);
 
-            
+            /*            
             //first block of image matches with the first decrypted block
             if(i == 0 && j == 0)
             {
                 PrintMatrix(fourCrossfourBlock,"The first picked block of image");
             }
+            */
             
 
             // xor data with iv block
@@ -195,6 +202,14 @@ Mat image_channel_decryption(Mat block,Mat key,Mat iv)
 
             // copy the resultant block to decrypted block
             image_block_setter(&decryptedBlock,fourCrossfourBlock,j,i);
+
+            /*
+            // storing correctly in decrypted block
+            if(i == 0 && j == 0)
+            {
+                PrintMatrix(decryptedBlock,"The first decrypted block of image");
+            }
+            */
         }
     } 
     return decryptedBlock;
