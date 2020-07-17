@@ -7,8 +7,8 @@
 #include "AES.hpp"
 
 // testing purpose
-//Mat encryptor(Mat data,Mat key,Mat iv);
-//Mat decryptor(Mat data,Mat key,Mat iv);
+Mat encryptor(Mat data,Mat key,Mat iv);
+Mat decryptor(Mat data,Mat key,Mat iv);
 
 int main(int argc, char **argv)
 {
@@ -20,15 +20,16 @@ int main(int argc, char **argv)
 
     image_Encryption_Decryption_CBC();
 
-    
-
     return 0;
 }
 
 // testing XOR function here
 
 /*
+    Mat tile = EncodedImage(cv::Range(row,min(row+NumberofBlocks,EncodedImage.rows)),cv::Range(col,min(col+NumberofBlocks,EncodedImage.cols)));
+
     // 16 bytes of key or 128 bits of key
+    /*
     uint8_t key[NumberofBlocks][NumberofBlocks] = 
     {
         0x2b, 0x28, 0xab, 0x09,
@@ -64,8 +65,9 @@ int main(int argc, char **argv)
     PrintMatrix(result2,"This is result 2");
     */
 
-   /*
+
     // from here checking 8x8 block of data
+    /*
     uint8_t test_block[8][8] = {
         {0x32, 0x88, 0x31, 0xe0, 0x31, 0x31, 0x88, 0x07},
         {0x43, 0x5a, 0x31, 0x37, 0x31, 0x31, 0x88, 0x07},
@@ -100,7 +102,9 @@ int main(int argc, char **argv)
     dataCopytoMatrix8(testData,test_block);
     dataCopytoMatrix(keyBlock,key);
     dataCopytoMatrix(ivBlock,iv);
+    */
 
+    /*
     Mat encryptedData = encryptor(testData,keyBlock,ivBlock);
     
     cout<<"The encrpyted data is"<<endl;
@@ -113,8 +117,8 @@ int main(int argc, char **argv)
         cout<<endl;
     }
     cout<<endl<<endl;
-    
-
+    */
+    /*
     Mat decryptedData = decryptor(encryptedData,keyBlock,ivBlock);
 
     cout<<"The decrpyted data is"<<endl;
@@ -127,7 +131,8 @@ int main(int argc, char **argv)
         cout<<endl;
     }
     cout<<endl<<endl;
-*/
+    */
+
 
 /*
 Mat encryptor(Mat data,Mat key,Mat iv)
@@ -140,8 +145,10 @@ Mat encryptor(Mat data,Mat key,Mat iv)
     {
         for(int j=0;j<8;j+=NumberofBlocks)
         {
-            FourCrossFourBlock = image_block_getter(data,j,i);
-            //PrintMatrix(FourCrossFourBlock,"This is 4x4 block picker");    
+            FourCrossFourBlock = data(cv::Range(i,min(i+NumberofBlocks,8)),cv::Range(j,min(j+NumberofBlocks,8)));
+            //FourCrossFourBlock = image_block_getter(data,j,i);
+            PrintMatrix(FourCrossFourBlock,"This is 4x4 block picker");
+              
             FourCrossFourBlock = XOR_CBC_Image(iv,FourCrossFourBlock);
             //PrintMatrix(FourCrossFourBlock,"This is after CBC with iv");
             FourCrossFourBlock =  block_encryption(FourCrossFourBlock,key);
@@ -155,6 +162,8 @@ Mat encryptor(Mat data,Mat key,Mat iv)
     return encryptedBlock;
 
 }
+*/
+/*
 
 Mat decryptor(Mat data,Mat key,Mat iv)
 {
@@ -168,20 +177,22 @@ Mat decryptor(Mat data,Mat key,Mat iv)
     {
         for(int j=0;j<8;j+=NumberofBlocks)
         {
-            temp = image_block_getter(data,j,i);
-            FourCrossFourBlock = image_block_getter(data,j,i);
-            PrintMatrix(FourCrossFourBlock,"This is 4x4 block picker of enc data"); 
+            FourCrossFourBlock = data(cv::Range(i,min(i+NumberofBlocks,8)),cv::Range(j,min(j+NumberofBlocks,8)));
+            //temp = image_block_getter(data,j,i);
+            //FourCrossFourBlock = image_block_getter(data,j,i);
+            //PrintMatrix(FourCrossFourBlock,"This is 4x4 block picker of enc data"); 
             decryptedBlockiv = block_decryption(FourCrossFourBlock,key);
-            PrintMatrix(decryptedBlockiv,"This is after decryption function");
+            //PrintMatrix(decryptedBlockiv,"This is after decryption function");
             decryptedBlockiv = XOR_CBC_Image(iv,decryptedBlockiv);
-            PrintMatrix(decryptedBlockiv,"This is after XOR");
+            //PrintMatrix(decryptedBlockiv,"This is after XOR");
             iv = temp;
-            PrintMatrix(iv,"Updated iv");
+            //PrintMatrix(iv,"Updated iv");
             FourCrossFourBlock = decryptedBlockiv; 
-            PrintMatrix(FourCrossFourBlock,"Updated this should be orignal text now");
+            //PrintMatrix(FourCrossFourBlock,"Updated this should be orignal text now");
             image_block_setter(&decryptedBlock,FourCrossFourBlock,j,i);
         }
     }
     return decryptedBlock;
 }
+
 */
