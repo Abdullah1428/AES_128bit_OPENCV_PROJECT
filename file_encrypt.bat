@@ -1,6 +1,6 @@
 g++ ^
                 -g ^
-                ./fileEnc_ECB_CBC.cpp ./utilities.cpp ./keyExpansion.cpp ./encryption_operations.cpp ./block_encryption.cpp ./AES_Encoder.cpp ^
+                ./arguments.cpp ./fileEnc_ECB_CBC.cpp ./utilities.cpp ./keyExpansion.cpp ./encryption_operations.cpp ./block_encryption.cpp ./AES_Encoder.cpp ^
                 -o ^
                 output.exe ^
                 -I D:\OpenCV-MinGW-Build-OpenCV-4.1.1-x64\include ^
@@ -8,5 +8,4 @@ g++ ^
                 -llibopencv_calib3d411 ^
                 -llibopencv_core411 ^
                 -llibopencv_imgcodecs411 ^
-                -llibopencv_imgproc411 
-.\output.exe
+                -llibopencv_imgproc411

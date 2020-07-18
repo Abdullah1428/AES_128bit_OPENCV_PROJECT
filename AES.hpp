@@ -78,3 +78,6 @@ void image_Encryption_Decryption_CBC();
 // picking and placing 4x4 blocks
 Mat image_block_getter(Mat,int,int);
 void image_block_setter(Mat *,Mat,int,int);
+
+// for arguments passed when running files
+int program_args(int,char **,const char *);
