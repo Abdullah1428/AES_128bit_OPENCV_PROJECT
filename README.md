@@ -2,8 +2,10 @@
 
 AES is an advanced encryption algorithm
 
-This project can encrypt and decrypt user text files using file stream libraries and images using Open CV
+## Open CV setup
+I have setup openCV for c++ in vs code.
+A detailed medium article to follow the setup is given
+#### https://medium.com/analytics-vidhya/vs-code-with-opencv-c-on-windows-10-explained-256418442c52
 
-## Project Structure
-
-All the function/methods used in the implementation are defined in AES.hpp header file
+All the function/methods used in the implementation are defined in AES.hpp header file.
+The main method to encode is in AES_Encoder.cpp and the main method to decode is in AES_Decoder.hpp
