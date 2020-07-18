@@ -11,12 +11,13 @@
 int program_args(int argc,char **argv,const char * keyword)
 {
     // i = 0 for the exe file
-    for(int i=1;i<argc;i++)
+    for(int index=1;index<argc;index++)
     {
-        if(!strcmp(argv[i],keyword))
+        if(!strcmp(argv[index],keyword))
         {
-            return 1;
+            return index;
         }
     }
     return 0;
 }
+

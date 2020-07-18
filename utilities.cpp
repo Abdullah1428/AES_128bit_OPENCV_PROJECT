@@ -248,3 +248,159 @@ void verticalBlocks(Mat matrix, int size, const char * sentence)
         roww+=4;
     }
 }
+
+// get text file length and text methods
+int getTextFileLength (const char * file)
+{
+    stringstream fileString;
+    
+    string fileData;
+	
+    ifstream userData;
+
+    string fileDir = "files/";
+
+    string fileName = fileDir+file;
+
+	userData.open(fileName, ios::in | ios::binary);
+    if (userData.is_open()) 
+    {
+        fileString << userData.rdbuf();
+    }
+    else
+    {
+        cout<<"the input file could not be read,Please try again with a proper text file with the text to be encrypted";
+        return 0;
+    }
+
+    userData.close();
+    
+    // displaying data stored in array
+    fileData = fileString.str();
+
+    // counting all characters in the file
+    int length = 0;
+    while(fileData[length] != '\0')
+    {
+        length++;
+    }
+
+    int adjustedLength = length;
+
+    if((adjustedLength % 16) != 0)
+    {
+        adjustedLength = (adjustedLength/NumberofBytes+1)*NumberofBytes;
+    }   
+
+    return adjustedLength;
+
+}
+
+uint8_t * getTextFromInputFile(const char * file , uint8_t * data)
+{
+    stringstream fileString;
+    
+    string fileData;
+	
+    ifstream userData;
+
+    string fileDir = "files/";
+
+    string fileName = fileDir+file;
+
+	userData.open(fileName, ios::in | ios::binary);
+    if (userData.is_open()) 
+    {
+        fileString << userData.rdbuf();
+    }
+
+    userData.close();
+    
+    // displaying data stored in array
+    fileData = fileString.str();
+
+    // counting all characters in the file
+    int length = 0;
+    while(fileData[length] != '\0')
+    {
+        length++;
+    }
+
+    uint8_t textdata[length];
+    
+    for (int i=0;i<length;i++)
+    {
+        textdata[i] = fileData[i];
+    }
+
+    int adjustedLength = length;
+
+    if((adjustedLength % 16) != 0)
+    {
+        adjustedLength = (adjustedLength/NumberofBytes+1)*NumberofBytes;
+    }   
+
+    for (int i=0;i<adjustedLength;i++)
+    {
+        // here we will add 0 in the adjusted length
+        if(i >= length)
+        {
+            data[i] = 0;
+        }
+        else
+        {
+            data[i] = textdata[i];
+        }
+    }
+
+    return data;
+}
+
+Mat getKeyFile(const char * key)
+{
+
+    Mat keyBlock = Mat::zeros(NumberofBlocks,NumberofBlocks,CV_8UC1);
+
+    string KEY;
+	ifstream infile;
+
+    string keyDir = "files/";
+
+    string keyFile = keyDir + key;
+
+	infile.open(keyFile, ios::in | ios::binary);
+
+    if (infile.is_open())
+	{
+        // The first line of file should be the key
+		getline(infile, KEY); 
+		infile.close();
+	}
+    else
+    {
+        cout<<"Key file could not be read";
+    }
+
+    istringstream hex_chars_stream(KEY);
+    uint8_t keyData[16];
+	int i = 0;
+	unsigned int c;
+	while (hex_chars_stream >> hex >> c)
+	{
+		keyData[i] = c;
+		i++;
+	}
+    
+    int index = 0;
+    for(int i=0;i<NumberofBlocks;i++)
+    {
+        for(int j=0;j<NumberofBlocks;j++)
+        {
+            keyBlock.at<uint8_t>(i,j) = keyData[index];
+            index++;
+        }
+    }
+
+    return keyBlock;
+
+}

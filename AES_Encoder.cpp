@@ -6,104 +6,187 @@
 
 #include "AES.hpp"
 
-// testing purpose
-//Mat encryptor(Mat data,Mat key,Mat iv);
-//Mat decryptor(Mat data,Mat key,Mat iv);
-
 int main(int argc, char **argv)
 {
 
-    if(!program_args(argc,argv,"hello"))
+    if(!program_args(argc,argv,"-file") || (!program_args(argc,argv,"-ecb")) && (!program_args(argc,argv,"-cbc")) || (!program_args(argc,argv,"-key")) || (!program_args(argc,argv,"-cbc")) && (!program_args(argc,argv,"-iv")) )
     {
         cout<<"Please provide correct arguments";
+        cout<<"The correct format to pass arguments are"<<endl;
+        cout<<"AES_Encoder.exe -file InputFile.txt/InputFile.jpg -ecb/cbc -key keyFile.txt (for cbc) -iv ivFile.txt"<<endl;
+        
+        // exit
+        return 1;
     }
 
-
-    //file_Encryption_ECB();
+    const char * file = argv[program_args(argc,argv,"-file")+1];
+    const char * keyFile = argv[program_args(argc,argv,"-key")+1];
+    const char * ivFile = argv[program_args(argc,argv,"-iv")+1]; 
     
-    //file_Encryption_CBC();
+    if (strstr(file,".txt")==NULL && strstr(file,".png")==NULL && strstr(file,".jpg")==NULL)
+    {
+        cout<<"Please provide a txt, jpg or png file"<<endl;
+        return 1;
+    }
 
-    //image_Encryption_Decryption_ECB();
+    if(strstr(file,".txt")!=NULL)
+    {
+        // here text file encryption will be done
+        int fileLength = getTextFileLength(file);
 
-    //image_Encryption_Decryption_CBC();
+        if(fileLength == 0)
+        {
+            // file could not be read
+            return 1;
+        }
+
+        // getting the key from the text file
+        Mat keyBlock = getKeyFile(keyFile);
+
+        // data will hold the orignal text
+        uint8_t * data = new uint8_t[fileLength];
+        // encrypted data will hold the ciphered text
+        uint8_t * encryptedData = new uint8_t[fileLength];
+
+        // reading data from input file
+        data = getTextFromInputFile(file,data);
+
+        struct timeval startTime , stopTime;
+
+        if(program_args(argc,argv,"-ecb"))
+        {
+            // ecb mode
+            // starting time
+            gettimeofday(&startTime, NULL);
+            // encrypting data using ecb mode
+            encryptedData = file_Encryption_ECB(keyBlock,fileLength,data,encryptedData);
+            // end time
+            gettimeofday(&stopTime, NULL);
+        }
+        else
+        {
+            // cbc mode
+            // starting time
+            gettimeofday(&startTime, NULL);
+            Mat ivBlock = getKeyFile(ivFile);
+            // encrypting data using cbc mode
+            encryptedData = file_Encryption_CBC(keyBlock,ivBlock,fileLength,data,encryptedData);
+            // end time
+            gettimeofday(&stopTime, NULL);
+        }
+        
+        ofstream outfile;
+	    outfile.open("files/EncodedFile.txt", ios::out | ios::binary);
+	    if (outfile.is_open())
+	    {
+		    outfile.write((char *)encryptedData,fileLength);
+		    outfile.close();
+		    cout << endl << "Wrote encrypted message to file EncodedFile in files folder" << endl;
+	    }   
+	    else
+        {
+            cout << "Unable to open file";
+        }
+
+        // freeing memory from pointers
+        delete []data;
+        delete []encryptedData;
+        delete file;
+        delete keyFile;
+        delete ivFile;
+        
+    }
+    else if (strstr(file,".jpg")!=NULL)
+    {
+        // getting the key from the text file
+        Mat keyBlock = getKeyFile(keyFile);
+        // here image encryption will be done
+        string imageDir = "files/";
+
+        string imageName = imageDir + file;
+
+        Mat InputImage = imread(imageName,IMREAD_COLOR);
+        // now as we know color image has 3 colors in it R G B
+        // so we will be needing to split each color from the image and then
+        // encrypt it and after that we will decrypt each color and then again merge to form orignal image
+        // so fot that purpose we will use open CV split and merge functions
+        Mat imageColorChannels[3]; // r g b
+        Mat encryptedColorChannels[3];
+
+        // now spliting 
+        split(InputImage,imageColorChannels);
+
+        struct timeval startTime , stopTime;
+
+        if(program_args(argc,argv,"-ecb"))
+        {
+            // ecb mode
+            // starting time
+            gettimeofday(&startTime, NULL);
+            // encrypting data using ecb mode
+            // now encrypting each channel
+            for(int channel = 0 ; channel < 3 ; channel++)
+            {
+                encryptedColorChannels[channel] = image_channel_encryption_ecb(imageColorChannels[channel],keyBlock); 
+            }
+            // end time
+            gettimeofday(&stopTime, NULL);
+        }
+        else
+        {
+            // cbc mode
+            // starting time
+            gettimeofday(&startTime, NULL);
+            Mat ivBlock = getKeyFile(ivFile);
+            // encrypting data using cbc mode
+            for(int channel = 0 ; channel < 3 ; channel++)
+            {
+                encryptedColorChannels[channel] = image_channel_encryption_cbc(imageColorChannels[channel],keyBlock,ivBlock); 
+            }
+            // end time
+            gettimeofday(&stopTime, NULL);
+        }
+
+        Mat encryptedImage;
+
+        merge(encryptedColorChannels,3,encryptedImage);
+
+        imwrite("files/EncryptedImage.png",encryptedImage);
+
+        cout<<endl<<"Encrypted image stored in files folder with name EncryptedImage"<<endl;
+                
+    }
 
     return 0;
 }
 
 
-// testing XOR function here
 
-/*
-    Mat tile = EncodedImage(cv::Range(row,min(row+NumberofBlocks,EncodedImage.rows)),cv::Range(col,min(col+NumberofBlocks,EncodedImage.cols)));
 
-    // 16 bytes of key or 128 bits of key
 
-    // from here checking 8x8 block of data
-    /*
-    uint8_t test_block[8][8] = {
-        {0x32, 0x88, 0x31, 0xe0, 0x31, 0x31, 0x88, 0x07},
-        {0x43, 0x5a, 0x31, 0x37, 0x31, 0x31, 0x88, 0x07},
-        {0xf6, 0x30, 0x98, 0x07, 0x31, 0x31, 0x88, 0x07},
-        {0xa8, 0x8d, 0xa2, 0x34, 0x31, 0x31, 0x88, 0x07},
-        {0xf6, 0x30, 0x98, 0x07, 0x35, 0x33, 0x88, 0x07},
-        {0xf6, 0x30, 0x98, 0x07, 0x35, 0x33, 0x88, 0x07},
-        {0xf6, 0x30, 0x98, 0x07, 0x35, 0x33, 0x88, 0x07},
-        {0xf6, 0x30, 0x98, 0x07, 0x35, 0x33, 0x88, 0x07}
-    };
 
-    uint8_t key[NumberofBlocks][NumberofBlocks] = 
-    {
-        0x2b, 0x28, 0xab, 0x09,
-        0x7e, 0xae, 0xf7, 0xcf,
-        0x15, 0xd2, 0x15, 0x4f,
-        0x16, 0xa6, 0x88, 0x3c
-    };
 
-    // for CBC Mode declaring IV matrix
-    uint8_t iv[NumberofBlocks][NumberofBlocks] = 
-    {
-        {0xf4, 0x2f, 0xf3, 0xff},
-        {0xdc, 0xdc, 0xdd, 0xdd},
-        {0xab, 0x12, 0x34, 0x67},
-        {0xa1, 0x45, 0x24, 0xc7}
-    };
 
-    Mat testData(8,8,CV_8UC1);
-    Mat keyBlock(NumberofBlocks, NumberofBlocks, CV_8UC1);
-    Mat ivBlock(NumberofBlocks,NumberofBlocks,CV_8UC1);
-    dataCopytoMatrix8(testData,test_block);
-    dataCopytoMatrix(keyBlock,key);
-    dataCopytoMatrix(ivBlock,iv);
-    */
 
-/*
-    Mat encryptedData = encryptor(testData,keyBlock,ivBlock);
-    
-    cout<<"The encrpyted data is"<<endl;
-    for (int i=0;i<8;i++)
-    {
-        for(int j=0;j<8;j++)
-        {
-            cout << std::hex << (int)encryptedData.at<uint8_t>(i, j) << " ";
-        }
-        cout<<endl;
-    }
-    cout<<endl<<endl;
-    */
-    /*
-    Mat decryptedData = decryptor(encryptedData,keyBlock,ivBlock);
 
-    cout<<"The decrpyted data is"<<endl;
-    for (int i=0;i<8;i++)
-    {
-        for(int j=0;j<8;j++)
-        {
-            cout << std::hex << (int)decryptedData.at<uint8_t>(i, j) << " ";
-        }
-        cout<<endl;
-    }
-    cout<<endl<<endl;
-*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

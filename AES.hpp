@@ -11,6 +11,8 @@
 #include <sstream> // providing string stream classes library
 #include <fstream> // for file handling library
 #include <string> // for string operations
+#include <math.h> // for math operations
+#include <sys/time.h> // for calculating encoding and decoding time
 
 using namespace std;
 using namespace cv;
@@ -58,21 +60,27 @@ Mat block_decryption(Mat,Mat);
 // file encryption methods
 Mat file_encryption(uint8_t [],Mat ,uint8_t []);
 // ECB Mode
-void file_Encryption_ECB();
+uint8_t * file_Encryption_ECB(Mat,int,uint8_t *,uint8_t *);
 // CBC Mode
-void file_Encryption_CBC();
+uint8_t * file_Encryption_CBC(Mat,Mat,int,uint8_t *,uint8_t *);
+
 // for CBC mode XOR of IV and Plain Text
 Mat XOR_CBC(Mat ,uint8_t []);
 
 // file decryption methods
 Mat file_decryption(uint8_t [],Mat ,uint8_t []);
 // ECB Mode
-void file_Decryption_ECB();
+uint8_t * file_Decryption_ECB(Mat,int,uint8_t *,uint8_t *);
 // CBC Mode
-void file_Decryption_CBC();
+uint8_t * file_Decryption_CBC(Mat,Mat,int,uint8_t *,uint8_t *);
 
 // for image encryption and decryption in ECB and CBC mode
 Mat XOR_CBC_Image(Mat,Mat); // iv and data block
+Mat image_channel_encryption_ecb(Mat,Mat);
+Mat image_channel_decryption_ecb(Mat,Mat);
+Mat image_channel_encryption_cbc(Mat block,Mat key,Mat iv);
+Mat image_channel_decryption_cbc(Mat block,Mat key,Mat iv);
+
 void image_Encryption_Decryption_ECB();
 void image_Encryption_Decryption_CBC();
 // picking and placing 4x4 blocks
@@ -81,3 +89,10 @@ void image_block_setter(Mat *,Mat,int,int);
 
 // for arguments passed when running files
 int program_args(int,char **,const char *);
+
+// to get key in hex from the key file
+Mat getKeyFile(const char *);
+
+// to get text length and text from the input file
+int getTextFileLength (const char *);
+uint8_t * getTextFromInputFile(const char *, uint8_t *);

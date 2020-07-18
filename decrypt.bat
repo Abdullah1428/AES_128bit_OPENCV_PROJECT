@@ -1,8 +1,8 @@
 g++ ^
                 -g ^
-                ./arguments.cpp ./fileEnc_ECB_CBC.cpp ./utilities.cpp ./keyExpansion.cpp ./encryption_operations.cpp ./block_encryption.cpp ./AES_Encoder.cpp ^
+                ./arguments.cpp ./textEncDec.cpp ./utilities.cpp ./keyExpansion.cpp ./encryption_operations.cpp ./block_encryption.cpp ./AES_Encoder.cpp ^
                 -o ^
-                output.exe ^
+                encoder.exe ^
                 -I D:\OpenCV-MinGW-Build-OpenCV-4.1.1-x64\include ^
                 -L D:\OpenCV-MinGW-Build-OpenCV-4.1.1-x64\x64\mingw\bin ^
                 -llibopencv_calib3d411 ^
