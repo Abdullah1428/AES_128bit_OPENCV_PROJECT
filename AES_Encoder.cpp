@@ -9,9 +9,12 @@
 int main(int argc, char **argv)
 {
 
-    if(!program_args(argc,argv,"-file") || (!program_args(argc,argv,"-ecb")) && (!program_args(argc,argv,"-cbc")) || (!program_args(argc,argv,"-key")) || (!program_args(argc,argv,"-cbc")) && (!program_args(argc,argv,"-iv")) )
+    if (!program_args(argc,argv,"-file") 
+    || (!program_args(argc,argv,"-ecb") && !program_args(argc,argv,"-cbc")) 
+    || !program_args(argc,argv,"-key") 
+    || (program_args(argc,argv,"-cbc") && !program_args(argc,argv,"-iv")) )
     {
-        cout<<"Please provide correct arguments";
+        cout<<"Please provide correct arguments"<<endl;
         cout<<"The correct format to pass arguments are"<<endl;
         cout<<"AES_Encoder.exe -file InputFile.txt/InputFile.jpg -ecb/cbc -key keyFile.txt (for cbc) -iv ivFile.txt"<<endl;
         
@@ -88,6 +91,11 @@ int main(int argc, char **argv)
             cout << "Unable to open file";
         }
 
+        long seconds = (stopTime.tv_sec - startTime.tv_sec);
+        long microSeconds = ((seconds*1000000) + stopTime.tv_usec) - (startTime.tv_usec);
+
+        cout<<endl<<"The encryption of text file took "<<seconds<<" in seconds and took "<<microSeconds<<" in micro seconds"<<endl;
+
         // freeing memory from pointers
         delete []data;
         delete []encryptedData;
@@ -154,6 +162,11 @@ int main(int argc, char **argv)
         imwrite("files/EncryptedImage.png",encryptedImage);
 
         cout<<endl<<"Encrypted image stored in files folder with name EncryptedImage"<<endl;
+
+        long seconds = (stopTime.tv_sec - startTime.tv_sec);
+        long microSeconds = ((seconds*1000000) + stopTime.tv_usec) - (startTime.tv_usec);
+
+        cout<<endl<<"The encryption of image file took "<<seconds<<" in seconds and took "<<microSeconds<<" in micro seconds"<<endl;
                 
     }
 

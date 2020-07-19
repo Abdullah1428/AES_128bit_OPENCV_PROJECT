@@ -80,18 +80,19 @@ Mat image_channel_encryption_ecb(Mat,Mat);
 Mat image_channel_decryption_ecb(Mat,Mat);
 Mat image_channel_encryption_cbc(Mat block,Mat key,Mat iv);
 Mat image_channel_decryption_cbc(Mat block,Mat key,Mat iv);
-
-void image_Encryption_Decryption_ECB();
-void image_Encryption_Decryption_CBC();
 // picking and placing 4x4 blocks
 Mat image_block_getter(Mat,int,int);
 void image_block_setter(Mat *,Mat,int,int);
 
+
 // for arguments passed when running files
 int program_args(int,char **,const char *);
-
 // to get key in hex from the key file
 Mat getKeyFile(const char *);
+
+// to get text length and text from the ciphered file
+int cipheredFileLength (const char *);
+uint8_t * getTextFromCipheredFile(const char *, uint8_t *);
 
 // to get text length and text from the input file
 int getTextFileLength (const char *);

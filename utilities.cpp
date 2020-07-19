@@ -100,6 +100,7 @@ void oneDcopytoMatrix (Mat dest,uint8_t source[])
     }   
 }
 
+/*
 void dataCopytoMatrix8(Mat mat, uint8_t array[8][8])
 {
     for (int i = 0; i < NumberofBlocks+NumberofBlocks; i++)
@@ -110,7 +111,7 @@ void dataCopytoMatrix8(Mat mat, uint8_t array[8][8])
         }
     }
 }
-
+*/
 /////////////////////////////////////////////////////////////////////////////
 // Similar Methods used for all types of encryptions and decryptions
 Mat image_block_getter(Mat data, int x, int y)
@@ -201,53 +202,6 @@ Mat XOR_CBC_Image(Mat iv, Mat data)
     return temp;
 }
 
-// 3 horizontal blocks
-void horizontalBlocks(Mat matrix, int size, const char * sentence)
-{
-    cout << endl << sentence << endl;
-
-    int coll = 0;
-    int horizontal_Condition = 4;
-
-    for(int k = 0; k < size; k++) 
-    {
-        for (int row = 0; row < NumberofBlocks; row++)
-        {
-            for (int col = coll; col < horizontal_Condition; col++)
-            {
-                cout << std::hex << (int)matrix.at<uint8_t>(row, col) << " ";
-            }
-            cout << endl;
-        }
-        cout<<endl;
-        horizontal_Condition += 4;
-        coll+=4;
-    }
-}
-
-// 3 vertical blocks
-void verticalBlocks(Mat matrix, int size, const char * sentence)
-{
-    cout << endl << sentence << endl;
-
-    int roww = 0;
-    int vertical_Condition = 4;
-
-    for(int k = 0; k < size; k++) 
-    {
-        for (int row = roww; row < vertical_Condition; row++)
-        {
-            for (int col = 0; col < NumberofBlocks; col++)
-            {
-                cout << std::hex << (int)matrix.at<uint8_t>(row, col) << " ";
-            }
-            cout << endl;
-        }
-        cout<<endl;
-        vertical_Condition += 4;
-        roww+=4;
-    }
-}
 
 // get text file length and text methods
 int getTextFileLength (const char * file)
@@ -269,7 +223,8 @@ int getTextFileLength (const char * file)
     }
     else
     {
-        cout<<"the input file could not be read,Please try again with a proper text file with the text to be encrypted";
+        cout<<"the input file could not be read"<<endl;
+        cout<<"Please try again with a proper text file with the text to be encrypted"<<endl;
         return 0;
     }
 
@@ -279,11 +234,9 @@ int getTextFileLength (const char * file)
     fileData = fileString.str();
 
     // counting all characters in the file
-    int length = 0;
-    while(fileData[length] != '\0')
-    {
-        length++;
-    }
+    int length = fileData.length();
+
+    //cout<<endl<<"The length of file is "<<length<<endl;
 
     int adjustedLength = length;
 
@@ -320,11 +273,7 @@ uint8_t * getTextFromInputFile(const char * file , uint8_t * data)
     fileData = fileString.str();
 
     // counting all characters in the file
-    int length = 0;
-    while(fileData[length] != '\0')
-    {
-        length++;
-    }
+    int length = fileData.length();
 
     uint8_t textdata[length];
     
@@ -355,6 +304,78 @@ uint8_t * getTextFromInputFile(const char * file , uint8_t * data)
 
     return data;
 }
+
+int cipheredFileLength (const char * keyfile)
+{
+    stringstream cipherString;
+    string cipherData;
+	ifstream cipherfile;
+
+    string fileDir = "files/";
+
+    string fileName = fileDir + keyfile;
+
+	cipherfile.open(fileName, ios::in | ios::binary);
+    if (cipherfile.is_open()) 
+    {
+        cipherString << cipherfile.rdbuf();
+        cipherfile.close();
+    }
+    else
+    {
+        cout<<"the input file could not be read"<<endl;
+        cout<<"Please try again with a proper text file with the text to be encrypted"<<endl;
+        return 0;
+    }
+    
+
+    // displaying data stored in array
+    cipherData = cipherString.str();
+
+    // counting all characters in the file
+    int length = cipherData.length();
+
+    //cout<<endl<<"The Length value is "<<length<<endl;
+
+    return length;
+}
+
+uint8_t * getTextFromCipheredFile(const char * file , uint8_t * data)
+{
+    stringstream fileString;
+    
+    string fileData;
+	
+    ifstream userData;
+
+    string fileDir = "files/";
+
+    string fileName = fileDir+file;
+
+	userData.open(fileName, ios::in | ios::binary);
+    if (userData.is_open()) 
+    {
+        fileString << userData.rdbuf();
+    }
+
+    userData.close();
+    
+    // displaying data stored in array
+    fileData = fileString.str();
+
+    //cout<<endl<<"The size and length are"<<fileData.size()<<" len"<<fileData.length()<<endl;
+
+    // counting all characters in the file
+    int length = fileData.length();
+    
+    for (int i=0;i<length;i++)
+    {
+        data[i] = fileData[i];
+    }
+
+    return data;
+}
+
 
 Mat getKeyFile(const char * key)
 {
