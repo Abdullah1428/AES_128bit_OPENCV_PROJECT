@@ -11,14 +11,24 @@ Mat image_channel_encryption_ecb(Mat block,Mat key)
 {
     int rows = block.rows;
     int cols = block.cols;
+
+    if(rows % 4 != 0)
+    {
+        rows = (rows/NumberofBlocks + 1)*NumberofBlocks;
+    }
+
+    if(cols % 4 != 0)
+    {
+        cols = (cols/NumberofBlocks + 1)*NumberofBlocks;
+    }
+
     Mat fourCrossfourBlock;
     // here each channel of image will be encrypted 
     
     // we are recieving whole channel for image and key as arguments
     // first step is to pick 4x4 block from our image so that we can pass it to AES encryption block
-
-    Mat encryptedBlock = Mat::zeros(rows - (rows % NumberofBlocks) + (rows % NumberofBlocks ? NumberofBlocks : 0),
-    cols - (cols % NumberofBlocks) + (cols % NumberofBlocks ? NumberofBlocks : 0),CV_8UC1 );
+    
+    Mat encryptedBlock = Mat::zeros(rows,cols,CV_8UC1);
 
     for(int i=0;i<rows;i+=NumberofBlocks)
     {
@@ -45,8 +55,7 @@ Mat image_channel_decryption_ecb(Mat block,Mat key)
     // we are recieving whole channel for image and key as arguments
     // first step is to pick 4x4 block from our image so that we can pass it to AES encryption block
 
-    Mat decryptedBlock = Mat::zeros(rows - (rows % NumberofBlocks) + (rows % NumberofBlocks ? NumberofBlocks : 0),
-    cols - (cols % NumberofBlocks) + (cols % NumberofBlocks ? NumberofBlocks : 0),CV_8UC1 );
+    Mat decryptedBlock = Mat::zeros(rows,cols,CV_8UC1);
 
     for(int i=0;i<rows;i+=NumberofBlocks)
     {
@@ -68,6 +77,18 @@ Mat image_channel_encryption_cbc(Mat block,Mat key,Mat iv)
     int rows = block.rows;
     int cols = block.cols;
 
+    if(rows % 4 != 0)
+    {
+        rows = (rows/NumberofBlocks + 1)*NumberofBlocks;
+    }
+
+    if(cols % 4 != 0)
+    {
+        cols = (cols/NumberofBlocks + 1)*NumberofBlocks;
+    }
+
+    //cout<<"Rows are : "<<rows<<" and Cols are : "<<cols;
+
     //cout<<"The rows and cols for enc "<<rows<<cols<<endl;
 
     Mat fourCrossfourBlock;
@@ -76,10 +97,8 @@ Mat image_channel_encryption_cbc(Mat block,Mat key,Mat iv)
     // we are recieving whole channel for image and key as arguments
     // first step is to pick 4x4 block from our image so that we can pass it to AES encryption block
 
-    Mat encryptedBlock = Mat::zeros(rows - (rows % NumberofBlocks) + (rows % NumberofBlocks ? NumberofBlocks : 0),
-    cols - (cols % NumberofBlocks) + (cols % NumberofBlocks ? NumberofBlocks : 0),CV_8UC1 );
-
-    //Mat encryptedBlock = Mat::zeros(rows,cols,CV_8UC1);
+    Mat encryptedBlock = Mat::zeros(rows,cols,CV_8UC1);
+    
     for(int i = 0; i < rows; i+=NumberofBlocks)
     {
         for(int j = 0; j < cols; j+=NumberofBlocks)
@@ -134,9 +153,6 @@ Mat image_channel_decryption_cbc(Mat block,Mat key,Mat iv)
     
     // we are recieving whole channel for image and key as arguments
     // first step is to pick 4x4 block from our image so that we can pass it to AES encryption block
-
-    //Mat decryptedBlock = Mat::zeros(rows - (rows % NumberofBlocks) + (rows % NumberofBlocks ? NumberofBlocks : 0),
-    //cols - (cols % NumberofBlocks) + (cols % NumberofBlocks ? NumberofBlocks : 0),CV_8UC1 );
 
     Mat decryptedBlock = Mat::zeros(rows,cols,CV_8UC1);
 

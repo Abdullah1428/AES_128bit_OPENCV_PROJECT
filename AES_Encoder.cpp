@@ -104,7 +104,7 @@ int main(int argc, char **argv)
         delete ivFile;
         
     }
-    else if (strstr(file,".jpg")!=NULL)
+    else if (strstr(file,".jpg")!=NULL || strstr(file,".png")!=NULL)
     {
         // getting the key from the text file
         Mat keyBlock = getKeyFile(keyFile);

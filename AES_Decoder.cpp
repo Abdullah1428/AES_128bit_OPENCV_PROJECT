@@ -15,7 +15,7 @@ int main(int argc, char ** argv)
     {
         cout<<"Please provide correct arguments";
         cout<<"The correct format to pass arguments are"<<endl;
-        cout<<"AES_Decoder.exe -file EncodedFile.txt/EncodedFile.jpg -ecb/cbc -key keyFile.txt (for cbc) -iv ivFile.txt"<<endl;
+        cout<<"AES_Decoder.exe -file EncodedFile.txt/EncodedFile.png -ecb/cbc -key keyFile.txt (for cbc) -iv ivFile.txt"<<endl;
         
         // exit
         return 1;
@@ -102,7 +102,7 @@ int main(int argc, char ** argv)
         delete ivFile;
         
     }
-    else if (strstr(file,".png")!=NULL || strstr(file,".png")!=NULL)
+    else if (strstr(file,".jpg")!=NULL || strstr(file,".png")!=NULL)
     {
         // here image decryption will be done
         // getting the key from the text file
