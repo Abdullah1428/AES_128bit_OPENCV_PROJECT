@@ -59,32 +59,32 @@ https://www.techiedelight.com/find-execution-time-c-program/
 
 #### ECB Image Encoding 
 42 kb image file took 0.97 seconds or 973227 micro seconds so 
-ECB image encoding is done 0.042 mb/0.97 seconds = 0.043 mb per second
+ECB image encoding is done 0.041 mb/0.97 seconds = 0.042 mb per second
 
 #### ECB Image Decoding 
 515 kb image file took 0.99 seconds or 991208 micro seconds so 
-ECB image decoding is done 0.515 mb/0.99 seconds = 0.52 mb per second
+ECB image decoding is done 0.502 mb/0.99 seconds = 0.50 mb per second
 
 #### CBC Image Encoding 
 42 kb image file took 0.98 seconds or 986351 micro seconds so 
-CBC image encoding is done 0.042 mb/0.98 seconds = 0.042 mb per second
+CBC image encoding is done 0.041 mb/0.98 seconds = 0.041 mb per second
 
 #### CBC Image Decoding 
 622 kb image file took 1.06 seconds or 1063494 micro seconds so 
-CBC image decoding is done 0.622 mb/1.06 seconds = 0.57 mb per second
+CBC image decoding is done 0.607 mb/1.06 seconds = 0.57 mb per second
 
 #### ECB Text file Encoding
 84 kb text file took 0.126 seconds or 126319 mirco seconds so 
-ECB Text file encoding is done 0.084 mb/0.126 seconds = 0.66 mb per second
+ECB Text file encoding is done 0.082 mb/0.126 seconds = 0.65 mb per second
 
 #### ECB Text file Decoding
 84 kb text file took 0.124 seconds or 124967 micro seconds so
-ECB text file decoding is done 0.084 mb/0.124 seconds = 0.67 mb per second
+ECB text file decoding is done 0.082 mb/0.124 seconds = 0.66 mb per second
 
 #### CBC Text file Encoding
 84 kb text file took 0.132 seconds or 132587 mirco seconds so 
-CBC Text file encoding is done 0.084 mb/0.132 seconds = 0.63 mb per second
+CBC Text file encoding is done 0.082 mb/0.132 seconds = 0.62 mb per second
 
 #### CBC Text file Decoding
 84 kb text file took 0.147 seconds or 147268 micro seconds so
-ECB text file decoding is done 0.084 mb/0.147 seconds = 0.57 mb per second
+ECB text file decoding is done 0.082 mb/0.147 seconds = 0.55 mb per second
