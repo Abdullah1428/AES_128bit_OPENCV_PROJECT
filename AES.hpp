@@ -35,8 +35,8 @@ void dataCopyTo2dArray(uint8_t dest[4][4],uint8_t []);
 void oneDcopytoMatrix (Mat,uint8_t []);
 void dataCopytoMatrix8(Mat mat, uint8_t array[8][8]);
 
-// first step key expansion
-void keyExpansion(Mat, uint8_t[]);
+// first step key Schedule
+void key_Schedule(Mat, uint8_t[]);
 
 // method to be used for both encryption and decryption
 Mat addRoundKey(Mat, uint8_t *);

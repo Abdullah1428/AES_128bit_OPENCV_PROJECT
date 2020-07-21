@@ -19,7 +19,7 @@ Mat block_decryption(Mat data,Mat key)
 
     // passsing the key to be expanded by 176 bytes for all rounds and storing in expandedKey array
     // keyExpansion method wiil return a expanded key for all rounds consisting of 176 bytes
-    keyExpansion(key, expandedKey);
+    key_Schedule(key, expandedKey);
 
     // for here we will decypt the ciphered data back to orignal data
     // for decryption the expanded key will start from last

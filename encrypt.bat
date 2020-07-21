@@ -1,6 +1,6 @@
 g++ ^
                 -g ^
-                ./arguments.cpp ./textEncDec.cpp ./imageEncDec.cpp ./utilities.cpp ./keyExpansion.cpp ./encryption_operations.cpp ./decryption_operations.cpp ./block_encryption.cpp ./block_decryption.cpp ./AES_Encoder.cpp ^
+                ./arguments.cpp ./textEncDec.cpp ./imageEncDec.cpp ./utilities.cpp ./key_Schedule.cpp ./encryption_operations.cpp ./decryption_operations.cpp ./block_encryption.cpp ./block_decryption.cpp ./AES_Encoder.cpp ^
                 -o ^
                 encoder.exe ^
                 -I D:\OpenCV-MinGW-Build-OpenCV-4.1.1-x64\include ^
